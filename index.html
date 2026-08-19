@@ -1,1 +1,476 @@
-<h1>my homepage</h1>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>个人主页</title>
+  <style>
+    /* ===== Reset & Base ===== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      color: #1a1a2e;
+      background: #f8f9fa;
+    }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    img { max-width: 100%; display: block; }
+
+    .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+
+    /* ===== Navigation ===== */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    nav .container {
+      display: flex; justify-content: space-between; align-items: center;
+      height: 60px;
+    }
+    .nav-logo { font-weight: 700; font-size: 1.2rem; color: #0a66c2; }
+    .nav-links { display: flex; gap: 28px; }
+    .nav-links a {
+      font-size: 0.9rem; font-weight: 500;
+      color: #555; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #0a66c2; }
+    .nav-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
+    .nav-toggle span { width: 24px; height: 2px; background: #333; border-radius: 2px; transition: 0.3s; }
+
+    /* ===== Hero ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #0a66c2 0%, #1e3a5f 50%, #16213e 100%);
+      color: #fff;
+      text-align: center;
+      padding: 120px 24px 80px;
+    }
+    .hero-avatar {
+      width: 140px; height: 140px; border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid rgba(255,255,255,0.3);
+      margin: 0 auto 24px;
+      background: rgba(255,255,255,0.15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3rem; font-weight: 700;
+    }
+    .hero h1 { font-size: 2.6rem; font-weight: 800; margin-bottom: 8px; }
+    .hero .subtitle { font-size: 1.1rem; color: rgba(255,255,255,0.75); margin-bottom: 6px; }
+    .hero .affiliation { font-size: 0.95rem; color: rgba(255,255,255,0.6); margin-bottom: 24px; }
+    .hero-badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-bottom: 28px; }
+    .hero-badges a {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 18px; border-radius: 20px;
+      font-size: 0.85rem; font-weight: 500;
+      background: rgba(255,255,255,0.12);
+      color: #fff; transition: background 0.2s;
+    }
+    .hero-badges a:hover { background: rgba(255,255,255,0.22); }
+    .hero-badges a svg { width: 18px; height: 18px; fill: currentColor; }
+
+    /* ===== Section Common ===== */
+    section { padding: 80px 0; }
+    .section-title {
+      font-size: 1.6rem; font-weight: 700; text-align: center;
+      margin-bottom: 48px; position: relative;
+    }
+    .section-title::after {
+      content: '';
+      display: block; width: 48px; height: 3px;
+      background: #0a66c2; border-radius: 2px;
+      margin: 12px auto 0;
+    }
+
+    /* ===== About ===== */
+    .about { background: #fff; }
+    .about-content {
+      max-width: 700px; margin: 0 auto;
+      font-size: 1rem; color: #444; text-align: center;
+    }
+
+    /* ===== Timeline (Education & Experience) ===== */
+    .timeline-section { background: #f8f9fa; }
+    .timeline {
+      position: relative; padding-left: 32px;
+    }
+    .timeline::before {
+      content: ''; position: absolute; left: 7px; top: 0; bottom: 0;
+      width: 2px; background: #d0d7de;
+    }
+    .timeline-item {
+      position: relative; margin-bottom: 36px; padding-left: 20px;
+    }
+    .timeline-item:last-child { margin-bottom: 0; }
+    .timeline-dot {
+      position: absolute; left: -29px; top: 4px;
+      width: 14px; height: 14px; border-radius: 50%;
+      background: #0a66c2; border: 3px solid #fff;
+      box-shadow: 0 0 0 2px #0a66c2;
+    }
+    .timeline-date {
+      font-size: 0.8rem; color: #888; font-weight: 500;
+      margin-bottom: 4px;
+    }
+    .timeline-title {
+      font-size: 1.05rem; font-weight: 600; color: #1a1a2e;
+      margin-bottom: 2px;
+    }
+    .timeline-subtitle {
+      font-size: 0.9rem; color: #666;
+    }
+    .timeline-desc {
+      font-size: 0.88rem; color: #777; margin-top: 4px;
+    }
+
+    /* ===== Publications ===== */
+    .publications { background: #fff; }
+    .pub-item {
+      display: flex; gap: 20px;
+      padding: 20px 0; border-bottom: 1px solid #eee;
+    }
+    .pub-item:last-child { border-bottom: none; }
+    .pub-num {
+      flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%;
+      background: #0a66c2; color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; font-weight: 600;
+    }
+    .pub-content { flex: 1; }
+    .pub-title {
+      font-size: 1rem; font-weight: 600; color: #1a1a2e;
+      margin-bottom: 4px;
+    }
+    .pub-authors {
+      font-size: 0.85rem; color: #666; margin-bottom: 2px;
+    }
+    .pub-venue {
+      font-size: 0.85rem; color: #0a66c2; font-style: italic;
+    }
+    .pub-links { margin-top: 6px; display: flex; gap: 10px; }
+    .pub-links a {
+      font-size: 0.8rem; color: #0a66c2; font-weight: 500;
+      border-bottom: 1px solid transparent; transition: border-color 0.2s;
+    }
+    .pub-links a:hover { border-bottom-color: #0a66c2; }
+
+    /* ===== Competitions & Awards ===== */
+    .competitions { background: #f8f9fa; }
+    .comp-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .comp-card {
+      background: #fff; border-radius: 12px; padding: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .comp-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+    .comp-card .award-icon {
+      width: 36px; height: 36px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; margin-bottom: 12px;
+    }
+    .comp-card .award-icon.gold { background: #fff8e1; color: #f9a825; }
+    .comp-card .award-icon.silver { background: #f5f5f5; color: #757575; }
+    .comp-card .award-icon.bronze { background: #fbe9e7; color: #e64a19; }
+    .comp-card .award-icon.default { background: #e3f2fd; color: #0a66c2; }
+    .comp-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 4px; }
+    .comp-card .comp-date { font-size: 0.8rem; color: #888; margin-bottom: 6px; }
+    .comp-card .comp-desc { font-size: 0.85rem; color: #666; }
+
+    /* ===== Skills ===== */
+    .skills { background: #fff; }
+    .skills-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 24px;
+    }
+    .skill-category h3 {
+      font-size: 0.95rem; font-weight: 600; color: #1a1a2e;
+      margin-bottom: 8px; padding-bottom: 6px;
+      border-bottom: 2px solid #e8ecf0;
+    }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .skill-tag {
+      padding: 4px 14px; border-radius: 16px;
+      font-size: 0.8rem; font-weight: 500;
+      background: #e8f0fe; color: #0a66c2;
+    }
+
+    /* ===== Footer ===== */
+    footer {
+      background: #1a1a2e; color: rgba(255,255,255,0.6);
+      text-align: center; padding: 32px 24px;
+      font-size: 0.85rem;
+    }
+    footer a { color: rgba(255,255,255,0.8); }
+    footer a:hover { color: #fff; }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-toggle { display: flex; }
+      .nav-links.open {
+        display: flex; flex-direction: column; gap: 16px;
+        position: absolute; top: 60px; left: 0; right: 0;
+        background: rgba(255,255,255,0.98);
+        padding: 20px 24px; border-bottom: 1px solid #eee;
+      }
+      .hero h1 { font-size: 2rem; }
+      .hero-avatar { width: 110px; height: 110px; font-size: 2.4rem; }
+      .pub-item { flex-direction: column; gap: 10px; }
+      .comp-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== Navigation ===== -->
+<nav>
+  <div class="container">
+    <div class="nav-logo">Homepage</div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">关于我</a></li>
+      <li><a href="#education">教育经历</a></li>
+      <li><a href="#publications">论文发表</a></li>
+      <li><a href="#competitions">竞赛获奖</a></li>
+      <li><a href="#skills">专业技能</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ===== Hero ===== -->
+<section class="hero">
+  <div>
+    <div class="hero-avatar">
+        🤵‍♂️
+     </div>
+    <h1>秦培杰</h1>
+    <p class="subtitle">农业工程与信息技术 · 硕士研究生</p>
+    <p class="affiliation">西北农林科技大学，信息工程学院</p>
+    <div class="hero-badges">
+      <a href="mailto:zhangsan@example.com">
+        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        Email
+      </a>
+      <a href="https://github.com" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub
+      </a>
+      <a href="https://scholar.google.com" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M5.242 13.769L0 9.5 12 0l12 9.5-5.242 4.269C17.548 11.249 14.978 9.5 12 9.5c-2.977 0-5.548 1.748-6.758 4.269zM12 10a7 7 0 1 0 0 14 7 7 0 0 0 0-14z"/></svg>
+        Google Scholar
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== About ===== -->
+<section class="about" id="about">
+  <div class="container">
+    <h2 class="section-title">关于我</h2>
+    <div class="about-content">
+        <!-- <div class="profile-picture-container" style="display: inline;"><img src="images/selfpic.jpg" alt="Profile Picture" class="profile-picture" style="width: 50%; height: 50%;"></div> -->
+      <p style="text-align: left;">
+        你好！我是秦培杰，XX大学计算机科学与技术专业硕士研究生。研究方向包括计算机视觉、自然语言处理与深度学习。
+        热爱开源社区，乐于分享技术心得。本页面汇总了我的教育背景、研究成果与竞赛经历，欢迎交流探讨。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Education ===== -->
+<section class="timeline-section" id="education">
+  <div class="container">
+    <h2 class="section-title">教育经历</h2>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date">2023.09 – 2026.06</div>
+        <div class="timeline-title">硕士研究生 · 农业工程与信息技术</div>
+        <div class="timeline-subtitle">西北农林科技大学，信息工程学院</div>
+        <div class="timeline-desc">研究方向：实习数据分析、多模态学习。GPA: 3.2/4.0</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date">2021.09 – 2023.06</div>
+        <div class="timeline-title">本科 · 计算机科学与技术</div>
+        <div class="timeline-subtitle">临沂大学，信息科学与工程学院</div>
+        <div class="timeline-desc">主修课程：java系统开发、数据库开发；GPA: 3.3/4.0</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date">2016.09 – 2021.06</div>
+        <div class="timeline-title">专科 · 计算机应用技术</div>
+        <div class="timeline-subtitle">山东商业职业技术学院，电子信息学院</div>
+        <div class="timeline-desc">主修课程：java系统开发、数据库开发、网络运维</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Publications ===== -->
+<section class="publications" id="publications">
+  <div class="container">
+    <h2 class="section-title">论文发表</h2>
+    <div class="pub-grid"> 暂无论文发表</div>
+    <!-- <div class="pub-item">
+      <div class="pub-num">1</div>
+      <div class="pub-content">
+        <div class="pub-title">A Novel Approach for Visual Question Answering Based on Multi-modal Fusion</div>
+        <div class="pub-authors"> Zhang yu, Sun yang, <strong>Qin peijie</strong></div>
+        <div class="pub-venue">Proceedings of the AAAI Conference on Artificial Intelligence (AAAI), 2025</div>
+        <div class="pub-links">
+          <a href="#">论文</a>
+          <a href="#">代码</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="pub-item">
+      <div class="pub-num">2</div>
+      <div class="pub-content">
+        <div class="pub-title">Efficient Transformer for Lightweight Semantic Segmentation</div>
+        <div class="pub-authors">Si Li, <strong>San Zhang</strong>, Wu Wang</div>
+        <div class="pub-venue">IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2025</div>
+        <div class="pub-links">
+          <a href="#">论文</a>
+          <a href="#">代码</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="pub-item">
+      <div class="pub-num">3</div>
+      <div class="pub-content">
+        <div class="pub-title">Cross-modal Representation Learning with Contrastive Objective</div>
+        <div class="pub-authors"><strong>San Zhang</strong>, Wu Wang</div>
+        <div class="pub-venue">Conference on Neural Information Processing Systems (NeurIPS), 2024</div>
+        <div class="pub-links">
+          <a href="#">论文</a>
+          <a href="#">代码</a>
+        </div>
+      </div>
+    </div> -->
+  </div>
+</section>
+
+<!-- ===== Competitions ===== -->
+<section class="competitions" id="competitions">
+  <div class="container">
+    <h2 class="section-title">竞赛获奖</h2>
+    <div class="comp-grid">
+      <div class="comp-card">
+        <div class="award-icon gold">🏆</div>
+        <h3>全国大学生数学建模竞赛</h3>
+        <div class="comp-date">2024 · 国家级3等奖</div>
+        <div class="comp-desc">基于优化算法的交通流量预测模型</div>
+      </div>
+      <!-- <div class="comp-card">
+        <div class="award-icon gold">🏆</div>
+        <h3>Kaggle – Image Matching Challenge</h3>
+        <div class="comp-date">2024 · 银牌（Top 3%）</div>
+        <div class="comp-desc">利用 Transformer 特征匹配实现高精度图像配准</div>
+      </div>
+      <div class="comp-card">
+        <div class="award-icon silver">🥈</div>
+        <h3>ACM-ICPC 国际大学生程序设计竞赛</h3>
+        <div class="comp-date">2022 · 亚洲区域赛银奖</div>
+        <div class="comp-desc">算法设计与编程实现，团队排名前 10%</div>
+      </div>
+      <div class="comp-card">
+        <div class="award-icon bronze">🥉</div>
+        <h3>中国大学生计算机设计大赛</h3>
+        <div class="comp-date">2023 · 省级二等奖</div>
+        <div class="comp-desc">基于深度学习的智能辅助诊断系统</div>
+      </div>
+      <div class="comp-card">
+        <div class="award-icon default">🎯</div>
+        <h3>天池大赛 – 电商搜索算法</h3>
+        <div class="comp-date">2024 · Top 10</div>
+        <div class="comp-desc">多模态检索排序算法优化，Recall@20 提升 12%</div>
+      </div> -->
+    </div>
+  </div>
+</section>
+
+<!-- ===== Skills ===== -->
+<section class="skills" id="skills">
+  <div class="container">
+    <h2 class="section-title">专业技能</h2>
+    <div class="skills-grid">
+      <div class="skill-category">
+        <h3>编程语言</h3>
+        <div class="skill-tags">
+          <span class="skill-tag">Python</span>
+          <span class="skill-tag">C++</span>
+          <span class="skill-tag">Java</span>
+          <span class="skill-tag">JavaScript</span>
+        </div>
+      </div>
+      <div class="skill-category">
+        <h3>深度学习框架</h3>
+        <div class="skill-tags">
+          <span class="skill-tag">PyTorch</span>
+          <span class="skill-tag">TensorFlow</span>
+          <span class="skill-tag">Hugging Face</span>
+        </div>
+      </div>
+      <div class="skill-category">
+        <h3>工具与平台</h3>
+        <div class="skill-tags">
+          <span class="skill-tag">Git</span>
+          <span class="skill-tag">Docker</span>
+          <span class="skill-tag">Linux</span>
+          <span class="skill-tag">LaTeX</span>
+        </div>
+      </div>
+      <div class="skill-category">
+        <h3>研究方向</h3>
+        <div class="skill-tags">
+          <span class="skill-tag">计算机视觉</span>
+          <span class="skill-tag">NLP</span>
+          <span class="skill-tag">多模态学习</span>
+          <span class="skill-tag">模型压缩</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer>
+  <div class="container">
+    <p>&copy; 2026 张三. Built with &hearts; for GitHub Pages.</p>
+    <p style="margin-top: 4px;">
+      <a href="mailto:zhangsan@example.com">zhangsan@example.com</a>
+    </p>
+  </div>
+</footer>
+
+<!-- ===== Mobile Nav Toggle ===== -->
+<script>
+  const toggle = document.getElementById('navToggle');
+  const links = document.getElementById('navLinks');
+  toggle.addEventListener('click', () => {
+    links.classList.toggle('open');
+  });
+  // 点击导航链接后自动收起菜单
+  links.addEventListener('click', () => {
+    links.classList.remove('open');
+  });
+</script>
+
+</body>
+</html>
